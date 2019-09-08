@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>book_index</title>
+    <script type="text/javascript" src="/jquery-1.12.4.js"></script>
+    <script type="text/javascript">
+
+        function deleteOneBook(id){
+            $.ajax({
+                type : "post",
+                url : "/deleteOneBook",
+                data : {"id":id},
+                success : function (data) {
+                    if (200 == data.code){
+                        alert("删除成功");
+                        getbooks();
+                    }else {
+                        alert("删除失败");
+                    }
+                },
+                error : function () {
+                    alert("服务器错误");
+                }
+            });
+        };
+
+        function getbooks(){
+            $.ajax({
+                type : "post",
+                url : "/getAllBook",
+                success : function (data) {
+                    if (200 == data.code){
+                        $("#table").empty();
+                        var tr = "";
+                        var books = data.result;
+                        for (var i = 0;i < books.length;i++){
+                            var book = books[i];
+                            tr += "<tr>";
+                            tr += "<td>"+book.id+"</td>";
+                            tr += "<td>"+book.bookName+"</td>";
+                            tr += "<td>"+book.bookPrice+"</td>";
+                            tr += "<td>"+"<a href='/turnBookUpdate?id="+book.id+"'>修改</a> ||<a href='javascript:void(0)' onclick='deleteOneBook("+book.id+")'>删除</a></td>";
+                            tr += "</tr>";
+                        }
+                        $("#table").append("<table border='1px solid black'>"
+                            +"<thead><tr><td>图书编号</td><td>图书名称</td><td>图书价格</td><td>操作</td></tr></thead>"
+                            +"<tbody>"+tr+"</tbody>"+"</table>"
+                        );
+                    }else {
+                        alert("暂无数据，请添加相关图书信息");
+                    }
+                },
+                error : function () {
+                    alert("服务器错误");
+                }
+            });
+        };
+        $(function () {
+            /*页面加载时展示图书数据*/
+            getbooks();
+        });
+    </script>
+</head>
+<body>
+<h2>图书信息首页面</h2>
+<a href="turnBookInsert">添加图书</a>
+
+<div id="table"></div>
+</body>
+</html>

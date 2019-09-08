@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>book_insert</title>
+    <script type="text/javascript" src="/jquery-1.12.4.js"></script>
+    <script type="text/javascript">
+        function insertBook() {
+            $.ajax({
+                type : "post",
+                url : "/insertBook",
+                data : $("#form").serialize(),
+                success : function (data) {
+                  if (200 == data.code){
+                      alert("添加成功");
+                      $("#bookName").val("");
+                      $("#bookPrice").val("");
+                  } else {
+                      alert("添加失败");
+                  }
+                },
+                error : function () {
+                    alert("服务器错误");
+                }
+            });
+            
+        }
+    </script>
+</head>
+<body>
+<h2>图书信息添加</h2>
+<a href="/turnBookIndex">返回首页</a>
+<form id="form">
+    图书名称：<input type="text" name="bookName" id="bookName"/><br>
+    图书价格：<input type="text" name="bookPrice" id="bookPrice"/><br>
+    <input type="button" value="添加" onclick="insertBook()"/>
+</form>
+</body>
+</html>

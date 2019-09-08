@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/jquery-1.12.4.js"></script>
+    <script type="text/javascript">
+        function updateBook() {
+            $.ajax({
+                type : "post",
+                url : "/updateBook",
+                data : $("#form").serialize(),
+                success : function (data) {
+                    if (200 == data.code){
+                        alert("修改成功！！");
+                    }else {
+                        alert("修改失败！！");
+                    }
+                },
+                error : function () {
+                    alert("服务器错误");
+                }
+
+
+            });
+        }
+
+
+    </script>
+</head>
+<body>
+<h2>修改！！</h2>
+<a href="/turnBookIndex">返回首页</a>
+<form id="form">
+    图书编号：<input type="text" name="id" th:value="${book.id}" readonly="readonly"/>
+    图书名称：<input type="text" name="bookName" th:value="${book.bookName}"/>
+    图书价格：<input type="text" name="bookPrice" th:value="${book.bookPrice}"/>
+<input type="button" value="修改" onclick="updateBook()"/>
+</form>
+</body>
+</html>
